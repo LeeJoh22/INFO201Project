@@ -13,7 +13,7 @@ library(dplyr)
 causesOfDeath <- read_delim("data/NCHS_-_Leading_Causes_of_Death__United_States.csv")
 insuranceCoverage <- read_delim("data/StateInsuarancePercentage.csv")
 df <- inner_join(causesOfDeath, insuranceCoverage, by = c("Year", "State"))
-df
+
 head(df, 5)
 ```
 
@@ -51,7 +51,7 @@ deaths_vs_insurance <- df %>%
   mutate(Region = sapply(State, get_region)) %>% 
   filter(State != "District of Columbia")
 
-deaths_vs_insurance
+head(deaths_vs_insurance, 5)
 ```
 
 ### Adding Numerical Variable
@@ -59,7 +59,7 @@ deaths_vs_insurance
 deaths_vs_insurance <- deaths_vs_insurance %>% 
   mutate(low_income_insurance = Uninsured + Medicaid)
 
-deaths_vs_insurance
+head(deaths_vs_insurance, 5)
 ```
 
 ### Summarization Dataframe
@@ -70,12 +70,11 @@ uninsured_deaths <- deaths_vs_insurance %>%
   summarize(avg_age_adjusted_death_rate = mean(`Age-adjusted Death Rate`, na.rm = TRUE),
             avg_uninsured_rate = mean(Uninsured, na.rm = TRUE))
 
-uninsured_deaths
+head(uninsured_deaths, 5)
 ```
 
 ### Question 1
 ```{r}
-deaths_vs_insurance
 uninsured_deaths %>% 
   ggplot(aes(x = avg_uninsured_rate, y = avg_age_adjusted_death_rate, color = factor(Region))) +
   geom_point() +
@@ -101,7 +100,6 @@ causes_vs_insurance <- causes_vs_insurance %>%
  `Cause Name` %in% c("Cancer", "Cirrhosis", "Stroke", "Diabetes") ~ "Selected Causes",
  TRUE ~ "Other Causes"
  ))
-causes_vs_insurance
 
 avg_death_rates <- causes_vs_insurance %>% 
   group_by(Year, Region, cause_type) %>% 

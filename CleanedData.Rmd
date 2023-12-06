@@ -1,0 +1,78 @@
+---
+title: "CleanedData"
+author: "Johnny"
+date: "2023-12-06"
+output: html_document
+---
+
+
+```{r}
+#Loading Data
+library(readr)
+library(ggplot2)
+library(dplyr)
+causesOfDeath <- read_delim("data/NCHS_-_Leading_Causes_of_Death__United_States.csv")
+insuranceCoverage <- read_delim("data/StateInsuarancePercentage.csv")
+df <- inner_join(causesOfDeath, insuranceCoverage, by = c("Year", "State"))
+df
+head(df, 5)
+```
+
+
+```{r}
+#Adding Categorical Variable, Region
+get_region <- function(state) {
+  NE <- c('Maine', 'Massachusetts', 'Rhode Island', 'Connecticut', 'New Hampshire', 'Vermont', 'New York', 'Pennsylvania', 'New Jersey', 'Delaware', 'Maryland')
+  SE <- c('West Virginia', 'Virginia', 'Kentucky', 'Tennessee', 'North Carolina', 'South Carolina', 'Georgia', 'Alabama', 'Mississippi', 'Arkansas', 'Louisiana', 'Florida')
+  MW <- c('Ohio', 'Indiana', 'Michigan', 'Illinois', 'Missouri', 'Wisconsin', 'Minnesota', 'Iowa', 'Kansas', 'Nebraska', 'South Dakota', 'North Dakota')
+  SW <- c('Texas', 'Oklahoma', 'New Mexico', 'Arizona')
+  W <- c('Colorado', 'Wyoming', 'Montana', 'Idaho', 'Washington', 'Oregon', 'Utah', 'Nevada', 'California', 'Alaska', 'Hawaii')
+  DOC <- c('District of Columbia')
+  
+  if (state %in% NE) {
+    return('Northeast')
+  }
+  else if (state %in% SE) {
+    return('Southeast')
+  }
+  else if (state %in% MW) {
+    return('Midwest')
+  }
+  else if (state %in% SW) {
+    return('Southwest')
+  }
+  else if (state %in% W) {
+    return('West')
+  }
+  else {
+    return('US')
+  }
+}
+
+deaths_vs_insurance <- df %>%
+  mutate(Region = sapply(State, get_region)) %>% 
+  filter(State != "District of Columbia")
+
+deaths_vs_insurance
+```
+
+
+```{r}
+#Adding Numerical Variable, low_income_insurance, sum of low income insurance/no insurance
+deaths_vs_insurance <- deaths_vs_insurance %>% 
+  mutate(low_income_insurance = Uninsured + Medicaid)
+
+deaths_vs_insurance
+```
+
+
+```{r}
+#Summarization Dataframe, average deaths per 100,000 and to average uninsured by region and year from 2008-2017
+uninsured_deaths <- deaths_vs_insurance %>% 
+  filter(`Cause Name` == "All causes") %>% 
+  group_by(Year, Region)  %>% 
+  summarize(avg_age_adjusted_death_rate = mean(`Age-adjusted Death Rate`, na.rm = TRUE),
+            avg_uninsured_rate = mean(Uninsured, na.rm = TRUE))
+
+uninsured_deaths
+```

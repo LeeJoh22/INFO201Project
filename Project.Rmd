@@ -1,0 +1,198 @@
+---
+title: "Project"
+author: "Johnny"
+date: "2023-11-29"
+output: html_document
+---
+
+### Loading Data
+```{r}
+library(readr)
+library(ggplot2)
+library(dplyr)
+causesOfDeath <- read_delim("data/NCHS_-_Leading_Causes_of_Death__United_States.csv")
+insuranceCoverage <- read_delim("data/StateInsuarancePercentage.csv")
+df <- inner_join(causesOfDeath, insuranceCoverage, by = c("Year", "State"))
+df
+head(df, 5)
+```
+
+### Adding Categorical Variable
+```{r}
+get_region <- function(state) {
+  NE <- c('Maine', 'Massachusetts', 'Rhode Island', 'Connecticut', 'New Hampshire', 'Vermont', 'New York', 'Pennsylvania', 'New Jersey', 'Delaware', 'Maryland')
+  SE <- c('West Virginia', 'Virginia', 'Kentucky', 'Tennessee', 'North Carolina', 'South Carolina', 'Georgia', 'Alabama', 'Mississippi', 'Arkansas', 'Louisiana', 'Florida')
+  MW <- c('Ohio', 'Indiana', 'Michigan', 'Illinois', 'Missouri', 'Wisconsin', 'Minnesota', 'Iowa', 'Kansas', 'Nebraska', 'South Dakota', 'North Dakota')
+  SW <- c('Texas', 'Oklahoma', 'New Mexico', 'Arizona')
+  W <- c('Colorado', 'Wyoming', 'Montana', 'Idaho', 'Washington', 'Oregon', 'Utah', 'Nevada', 'California', 'Alaska', 'Hawaii')
+  DOC <- c('District of Columbia')
+  
+  if (state %in% NE) {
+    return('Northeast')
+  }
+  else if (state %in% SE) {
+    return('Southeast')
+  }
+  else if (state %in% MW) {
+    return('Midwest')
+  }
+  else if (state %in% SW) {
+    return('Southwest')
+  }
+  else if (state %in% W) {
+    return('West')
+  }
+  else {
+    return('US')
+  }
+}
+
+deaths_vs_insurance <- df %>%
+  mutate(Region = sapply(State, get_region)) %>% 
+  filter(State != "District of Columbia")
+
+deaths_vs_insurance
+```
+
+### Adding Numerical Variable
+```{r}
+deaths_vs_insurance <- deaths_vs_insurance %>% 
+  mutate(low_income_insurance = Uninsured + Medicaid)
+
+deaths_vs_insurance
+```
+
+### Summarization Dataframe
+```{r}
+uninsured_deaths <- deaths_vs_insurance %>% 
+  filter(`Cause Name` == "All causes") %>% 
+  group_by(Year, Region)  %>% 
+  summarize(avg_age_adjusted_death_rate = mean(`Age-adjusted Death Rate`, na.rm = TRUE),
+            avg_uninsured_rate = mean(Uninsured, na.rm = TRUE))
+
+uninsured_deaths
+```
+
+### Question 1
+```{r}
+deaths_vs_insurance
+uninsured_deaths %>% 
+  ggplot(aes(x = avg_uninsured_rate, y = avg_age_adjusted_death_rate, color = factor(Region))) +
+  geom_point() +
+  geom_smooth(method = "loess", span = 0.4, color = "red") +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(title = "Average Age-adjusted Death Rate vs Average Uninsured Percentage (2008-2017)",
+       x = "Average Uninsured Percentage",
+       y = "Average Age-adjusted Death Rate per 100,000") 
+```
+
+### Question 2
+```{r}
+causes_vs_insurance <- df %>%
+ mutate(Region = sapply(State, get_region)) %>% 
+ filter(State != "District of Columbia")
+
+causes_vs_insurance <- causes_vs_insurance %>% 
+ mutate(low_income_insurance = Uninsured + Medicaid)
+
+causes_vs_insurance <- causes_vs_insurance %>% 
+ mutate(cause_type = case_when(
+ `Cause Name` %in% c("Cancer", "Cirrhosis", "Stroke", "Diabetes") ~ "Selected Causes",
+ TRUE ~ "Other Causes"
+ ))
+causes_vs_insurance
+
+avg_death_rates <- causes_vs_insurance %>% 
+  group_by(Year, Region, cause_type) %>% 
+  mutate(avg_age_adjusted_death_rate = mean(`Age-adjusted Death Rate`, na.rm = TRUE), avg_uninsured_rate = mean(Uninsured, na.rm = TRUE))
+
+ggplot(avg_death_rates, aes(x = Year, y = avg_age_adjusted_death_rate, group = Region, color = Region)) +
+ geom_line() +
+ facet_wrap(~cause_type, ncol = 1) +
+ labs(title = "Region-wise trends due to different causes of death",
+       x = "Year",
+       y = "Age-adjusted Death Rate per 100,000") 
+```
+
+## Part 1
+```{r}
+deaths_vs_insurance %>% 
+  filter(`Cause Name` == "Heart disease") %>% 
+  group_by(Year, Region) %>% 
+  mutate(avg_death = mean(`Age-adjusted Death Rate`)) %>% 
+  mutate(avg_low_income_insuarance = mean(low_income_insurance)) %>% 
+  ggplot(aes(Year, avg_low_income_insuarance, size = avg_death, color = Region)) +
+  geom_point() +
+  labs(x = "Year", y = "Average Low Income/Non Insured Percent", title = "Deaths/100,000 based on low income/non insured percent (Heart Disease)") +
+  scale_size_binned(breaks = seq(160, 220, by = 10))
+```
+```{r}
+deaths_vs_insurance %>% 
+  filter(`Cause Name` == "Diabetes") %>% 
+  group_by(Year, Region) %>% 
+  mutate(avg_death = mean(`Age-adjusted Death Rate`)) %>% 
+  mutate(avg_low_income_insuarance = mean(low_income_insurance)) %>% 
+  ggplot(aes(Year, avg_low_income_insuarance, size = avg_death, color = Region)) +
+  geom_point() + 
+  labs(x = "Year", y = "Average Low Income/Non Insured Percent", title = "Deaths/100,000 based on low income/non insured percent (Diabetes)") +
+  scale_size_binned()
+```
+## Part 2
+```{r}
+deaths_vs_insurance %>% 
+  filter(`Cause Name` == "Unintentional injuries") %>% 
+  group_by(Year, Region) %>% 
+  mutate(avg_death = mean(`Age-adjusted Death Rate`)) %>% 
+  mutate(avg_employer_insuarance = mean(Employer)) %>% 
+  ggplot(aes(Year, avg_employer_insuarance, size = avg_death, color = Region)) +
+  geom_point() + 
+  labs(x = "Year", y = "Average Employer Insured Percent", title = "Deaths/100,000 based on employer insured percent (Accidents)") +
+  scale_size_binned(breaks = seq(30, 50, by = 3))
+```
+
+```{r}
+deaths_vs_insurance %>% 
+  filter(`Cause Name` == "Influenza and pneumonia") %>% 
+  group_by(Year, Region) %>% 
+  mutate(avg_death = mean(`Age-adjusted Death Rate`)) %>% 
+  mutate(avg_medicare_insuarance = mean(Medicare)) %>% 
+  ggplot(aes(Year, avg_medicare_insuarance, size = avg_death, color = Region)) +
+  geom_point() + 
+  labs(x = "Year", y = "Average Medicare Insured Percent", title = "Deaths/100,000 based on Medicare insured percent (influenza/pneumonia)") +
+  scale_size_binned()
+```
+
+### Question 3
+```{r}
+deaths_vs_insurance %>% 
+  filter(`Cause Name` == "Heart disease") %>% 
+  group_by(Year, Region) %>% 
+  summarize(avg_deaths = mean(`Age-adjusted Death Rate`)) %>% 
+  ggplot(aes(Year, avg_deaths, color = factor(Region))) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Year", y = "Average Deaths per 100,000", title = "Average Deaths per 100,000 (Heart Disease) by Region vs Year")
+```
+
+```{r}
+deaths_vs_insurance %>% 
+  filter(`Cause Name` == "Stroke") %>% 
+  group_by(Year, Region) %>% 
+  summarize(avg_deaths = mean(`Age-adjusted Death Rate`)) %>% 
+  ggplot(aes(Year, avg_deaths, color = factor(Region))) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Year", y = "Average Deaths per 100,000", title = "Average Deaths per 100,000 (Stroke) by Region vs Year")
+```
+
+```{r}
+deaths_vs_insurance %>% 
+  filter(`Cause Name` == "Cancer") %>% 
+  group_by(Year, Region) %>% 
+  summarize(avg_deaths = mean(`Age-adjusted Death Rate`)) %>% 
+  ggplot(aes(Year, avg_deaths, color = factor(Region))) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Year", y = "Average Deaths per 100,000", title = "Average Deaths per 100,000 (Cancer) by Region vs Year")
+```

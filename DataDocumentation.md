@@ -21,8 +21,9 @@
 
   The second dataset that was used in our analysis was a summarization data frame consisting of variables inherited or derived from the datasets we had selected and aggregations of data points. It consists of yearly data from 2008-2017 of regional average deaths per 100,000 for all causes of death and average uninsured percentage. Each row in the data frame describes the average deaths per 100,000 and average uninsured percentage of a given region in a given year. In total there are 60 rows and there were no missing data points. The new variables that were calculated for this data frame include avg_age_adjusted_death_rate and avg_uninsured_rate. Average_age_adjusted_death_rate was derived by filtering the joined data for deaths classified as “all causes” first then grouping by year and region and finally finding the mean of “Age-adjusted Death Rate”, ignoring null values. Average_uninsured_rate underwent the same filtering and grouping except it used the mean of “Uninsured”, ignoring null values. The following clarifies the meaning and derivation of variables that were used in our analysis from the summarization dataset:
 
-
+```
 - Year - provided by joined dataset, year data is associated with
 - Region - calculated earlier and inherited from joined dataset, region of the United States a state is associated with
 - Avg_age_adjusted_death_rate - derived from joined dataset using procedure described above, average number of deaths per 100,000 for a given region for all causes of death
 - Avg_uninsured_rate - derived from joined dataset using procedure described above, average percentage of individuals in a given region who are uninsured
+```

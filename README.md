@@ -11,4 +11,7 @@ Does a specific region of the US have higher average deaths per 100,000 in categ
 
 The results of comparing these sets can potentially be of interest to a very wide range of people. This includes young people who want to know which insurance type could help them stay healthy, people concerned with health trends, or even insurance groups who want to use data to incentivise customers that their insurance is the best. The potential relationship between these datasets can also be of interest to policy makers who are arguing for or against changes to the current healthcare system. 
 
-![](/Users/johnnylee/Desktop/Screenshot 2023-12-05 at 9.29.52 PM.png)
+
+<img width="698" alt="Screenshot 2023-12-05 at 9 29 52 PM" src="https://github.com/LeeJoh22/INFO201Project/assets/115340183/01a7cf54-d76a-4888-bd81-c0987772f48b">
+
+

@@ -5,7 +5,7 @@
   The final datasets that we used in our analysis are a combination of the two datasets with key variables being derived from the information in the datasets we selected. The main dataset that is derived from joining the two that we found contains data of total deaths from all 10 causes, deaths in total, deaths per 100,000 relative to population size, region of the United States a state is in, and a breakdown of different insurance coverage percentages by population from 2008-2017 for all 50 states and the United States as a whole. It was joined based on years and states that both datasets had in common. Each row in the dataset represents the number of deaths and insurance coverage distribution percentages for a specific cause of death in a specific year for a state or US as a whole between 2008-2017. In total, there are 5720 observations with no missing data. The following clarifies the meaning and derivation of variables that were used in our analysis from the main joined dataset:
 
 
-* Year - provided by dataset, year the data is from
+Markup: * Year - provided by dataset, year the data is from
 - Cause Name - provided by dataset, specific cause of death
 - State - provided by dataset, state the data represents
 - Deaths - provided by dataset, total number of deaths for a state or the United States as a whole

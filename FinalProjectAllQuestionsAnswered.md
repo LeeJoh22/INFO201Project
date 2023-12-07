@@ -72,9 +72,6 @@ For question 3, we went with dot plots connected by lines where x is year and y 
 </p>
 
 #### Question 2 Visualizations:
-<p align="center">
-<img width="697" alt="Screenshot 2023-12-06 at 1 31 43 AM" src="https://github.com/LeeJoh22/INFO201Project/assets/115340183/5b9fa0dc-3887-4489-aa1b-8a82cc3c106f">
-</p>
 
 #### Part 1:
 <p align="center">
@@ -90,6 +87,7 @@ For question 3, we went with dot plots connected by lines where x is year and y 
 
 #### Question 3 Visualizations:
 <p align="center">
+ <img width="697" alt="Screenshot 2023-12-06 at 1 31 43 AM" src="https://github.com/LeeJoh22/INFO201Project/assets/115340183/5b9fa0dc-3887-4489-aa1b-8a82cc3c106f">
 <img width="692" alt="Screenshot 2023-12-06 at 1 34 59 AM" src="https://github.com/LeeJoh22/INFO201Project/assets/115340183/e0477f10-efd8-4aff-a0e2-3ba357a02d53">
 <img width="692" alt="Screenshot 2023-12-06 at 1 35 23 AM" src="https://github.com/LeeJoh22/INFO201Project/assets/115340183/8efb203b-3c10-418b-8d44-6c7194ab583c">
 <img width="697" alt="Screenshot 2023-12-06 at 1 35 49 AM" src="https://github.com/LeeJoh22/INFO201Project/assets/115340183/bc7087b4-f3b3-4139-a5f1-0358d721e9c5">
@@ -100,16 +98,6 @@ For question 3, we went with dot plots connected by lines where x is year and y 
 The visualization shows that higher average uninsured percentages generally result in higher average deaths per 100,000 from all causes. This means that affordable health care plays a crucial part in preventing deaths from common illnesses like influenza to serious ones like cancer. With higher percentages of uninsured people, less are able to have regular health checkups or afford expensive treatments that are covered by insurance plans resulting in higher death rates. In the visualization, it can be seen that the trend line has a positive slope. The northeast generally had 5-10% uninsured and 700-750 deaths per 100,000 but the southeast had 10-15% uninsured and 850-900 deaths per 100,000. While this is the most extreme case, the southwest had 17.5-22.5% uninsured and 775-825 deaths per 100,000. With the southeast already being the unhealthiest region in general, having higher uninsured rates exponentially increased the average deaths. Regions like the southeast that are more moderate saw a steady increase in deaths for higher uninsured percentages. Exactly how impactful the uninsured percentage is on deaths needs to be further analyzed by doing state level analysis over a period of a couple decades. There needs to also be research into how the number of healthcare visits impacts an individual's health and their chances of developing different illnesses to further support this claim. 
 
 #### Question 2 Findings:
-The R plot represents the age-adjusted death rate per 100,000 people across various regions in the United States. The data has been normalized by age, allowing for a fair comparison of mortality rates across different age groups.
-
-The x-axis represents the year 2015, which means the data plotted is specific to that year. The y-axis represents the age-adjusted death rate per 100,000 people, with a higher number indicating a higher death rate. The plot is color-coded based on the region of the United States, with each region represented by a unique color.
-
-Upon observing the plot, it can be inferred that the death rate across different regions varies. For example, the death rate in the Northeast region is higher than that in the Midwest region, while the death rate in the Southeast region is significantly lower than that in the Midwest region.
-The regions can also be observed to exhibit some degree of variation within themselves, indicating that mortality rates can differ even within a given region based on factors such as lifestyle, access to healthcare, and other socioeconomic factors.
-
-The presence of two trend lines on the plot suggests that the age-adjusted death rate has shown an increase over the years for other causes and for selected causes (Heart Disease, Stroke, Cancer).
-
-It is important to note that while this plot provides valuable insights into regional trends in mortality rates, it does not offer a comprehensive explanation for these trends. Thus, further investigation into the specific causes of death and other relevant factors can be seen in the following plots to determine the underlying drivers of these patterns.
 
 #### Q2 Part 1 Findings
 #### Deaths/100,000 based on low income/non insured percent (Heart Disease):
@@ -126,6 +114,17 @@ We chose to analyze employer insured percent versus deaths caused by accidents/u
 We chose to analyze Medicare insured percent versus deaths caused by influenza/pneumonia because the elderly and immunocompromised are susceptible to influenza/pneumonia and Medicare provides insurance coverage for the elderly/disabled. In general, higher percentages of Medicare coverage resulted in deaths from influenza/pneumonia decreasing or staying the same. This is clear in the southwest, northeast, and US data. The southwest had a 2.5% increase in Medicare coverage and over a 5 death decrease, the northeast had a 3% increase and 3 death decrease, and the US had a 2.5% increase and 5 death decrease from 2008-2017. This means that Medicare provided the elderly with the opportunity to seek treatment for influenza/pneumonia which led to less deaths. There would need to be further analysis to verify that the increase in Medicare percentage wasn’t a direct result of an increase in the elderly/immunocompromised population. 
 
 #### Question 3 Findings:
+The R plot represents the age-adjusted death rate per 100,000 people across various regions in the United States. The data has been normalized by age, allowing for a fair comparison of mortality rates across different age groups.
+
+The x-axis represents the year 2015, which means the data plotted is specific to that year. The y-axis represents the age-adjusted death rate per 100,000 people, with a higher number indicating a higher death rate. The plot is color-coded based on the region of the United States, with each region represented by a unique color.
+
+Upon observing the plot, it can be inferred that the death rate across different regions varies. For example, the death rate in the Northeast region is higher than that in the Midwest region, while the death rate in the Southeast region is significantly lower than that in the Midwest region.
+The regions can also be observed to exhibit some degree of variation within themselves, indicating that mortality rates can differ even within a given region based on factors such as lifestyle, access to healthcare, and other socioeconomic factors.
+
+The presence of two trend lines on the plot suggests that the age-adjusted death rate has shown an increase over the years for other causes and for selected causes (Heart Disease, Stroke, Cancer).
+
+It is important to note that while this plot provides valuable insights into regional trends in mortality rates, it does not offer a comprehensive explanation for these trends. Thus, further investigation into the specific causes of death and other relevant factors can be seen in the following plots to determine the underlying drivers of these patterns.
+
 #### Deaths/100,000 per Region vs Year (Heart Disease):
 The southeast region of the US is the clear leader in the number of deaths per 100,000 by about 25 deaths. The western region of the US leads in lowest number of deaths per 100,000 by about 20 deaths. This tells us that people who live in the southeast region of the US are more unhealthy relative to other parts of the US and therefore more prone to heart disease. However, people living in the western region of the US are the least likely to develop heart disease meaning that they may be more likely to have healthier lifestyles. This could be caused by factors such as diet, exercise, smoking habits/smoke exposure, etc. but we would need to do analysis on data sets regarding those factors to make a solid claim. The other regions of the US including the midwest, northwest, and southwest are in the middle with not a lot of deviation. Between 2008 and 2017, the general trend for all regions and the United States as a whole is that the population has been getting healthier, with a downwards trend in the number of deaths per 100,000 caused by heart disease. All regions had a decrease between 10-30 deaths per 100,000 throughout this time period. It can also be observed that while the southeast region had the highest deaths per 100,000 in 2008, it also had the greatest decrease in average number of deaths by almost 30 deaths per 100,000. However, even with such a significant improvement, it still leads by about 15 deaths per 100,000. The northeast region is close behind with the most improvement for regions that started in the middle with a decrease of about 25 deaths per 100,000. This makes the region close to the west in becoming the leader in lowest deaths caused by heart disease with only a 10 death gap. All other regions showed moderate improvement while the United States as a whole had about a 25 death decrease from 2008-2017. This means over the course of a decade individuals in all regions had a significant decrease in their chances of developing heart disease. 
 

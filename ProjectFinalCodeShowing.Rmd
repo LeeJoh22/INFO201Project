@@ -1,0 +1,289 @@
+---
+title: "FinalProjectCodeAndWriteup"
+author: "Johnny"
+date: "2023-12-08"
+output: html_document
+---
+
+### Introduction
+In the last century the United States has begun to develop a notorious reputation due to its citizens' poor lifestyle choices that result in high levels of health related deaths like cancer, obesity, diabetes, and more. Chronic diseases and health conditions impact the overall health of the population, and our first dataset explores the leading causes of death over a span of nearly 20 years across each of the 50 states. Out of 10 leading causes of death, 9 of them were healthcare related. The high suicide levels across the nation reflect the high stress levels people feel and the lack of mental help resources that influence these rates. While lifestyle choices do not solely account for kidney disease, heart disease, diabetes, or respiratory disease, which rank among the leading causes, they can significantly contribute to or exacerbate these conditions. Along with the poor lifestyle choices, the lack of a national healthcare system in the U.S. limits the availability of affordable access to healthcare services and treatments. Medical care in America is one of the most expensive healthcare systems, yet ranks last compared to other industrialized countries. Health insurance aims to protect people from those high costs and provide screenings as preventative care, but insurance plans are expensive, often provide inadequate benefits, have high deductibles, and have gaps in coverage. This combination of poor population health and unreasonably priced and unaccessible healthcare leads to high rates of health related deaths. By comparing the leading causes of death in each state to the types of healthcare insurance coverage that is used in each state, we hope to better understand the relationship between healthcare coverage and health related deaths. 
+This topic is interesting because healthcare and death are factors of life that everyone must deal with. As the cost of living and healthcare only seem to be increasing, it is becoming increasingly important to lead more health conscious lives and be aware of which insurances provide the best and most affordable access to live life to the fullest. We are curious to see if there is a connection between how states are insured and how high the health related deaths are. The comparison of these two datasets will hopefully allow us to answer the following questions:
+
+How does the average uninsured percentage by regions in the US affect the average number of deaths per 100,000 between 2008 and 2017? Does higher uninsured percentage lead to higher number of deaths on average?
+
+Do regions/states with higher percentages of “low income insurance/no insurance” have higher rates of deaths by diseases that could be medically treated/prevented like heart disease and diabetes? Are there relationships between certain health insurance types and deaths that are commonly associated with the population that holds said insurance type? 
+
+Does a specific region of the US have higher average deaths per 100,000 in categories like heart disease, stroke, and cancer which could be medically linked to each other? Do we see trends in other causes of death in specific regions of the US?
+
+The results of comparing these sets can potentially be of interest to a very wide range of people. This includes young people who want to know which insurance type could help them stay healthy, people concerned with health trends, or even insurance groups who want to use data to incentivise customers that their insurance is the best. The potential relationship between these datasets can also be of interest to policy makers who are arguing for or against changes to the current healthcare system. 
+
+### Explanation of Data
+The research questions we are focused on are trying to discover relationships between types of insurance coverage and general health of different regions of the United States in addition to healthiest and unhealthiest regions. The first dataset we chose was a dataset that contains data from 1999-2017 on the top 10 leading causes of death in the United States. The general population of this dataset was the entire United States and population per state which was one reason why we chose it. Another reason why we selected this dataset was because it was extremely detailed in its breakdown of where the numbers were coming from and had organized, easy to understand data. Since the dataset had a breakdown of deaths for each cause by state, total deaths from all 10 causes by state, and total deaths for the entire United States, it would allow us a lot of flexibility in the questions we wanted to research and how we joined datasets. The variables of the dataset were also informative because it gave us total values in addition to deaths per 100,000 so analysis we performed would be relative to the size of states and not be skewed by state size. This first dataset originated from Data.gov and the Center for Disease Control and Prevention websites. The data was collected by the Center for Disease Control and Prevention and the Department of Health and Human Services. The number of deaths for each cause was derived from information from all resident death certificates filed in the 50 states and the District of Columbia using demographic and medical characteristics. Mortality rate per 100,000 post 2010 was derived based on the 2000 US standard population and updated intercensal population. For 2010 and onward, it was derived using the census. Since the data originated from a trustworthy source, we knew the numbers would provide accurate answers to questions we were trying to answer. It is also public and can be used freely - mainly for research and educational purposes. This dataset was very complete with essentially no missing data as it came from a government source which means that future data cleaning would be very easy.
+
+The second dataset we chose contained data on insurance coverage by state from 2008-2017. It provided a detailed breakdown of the percent of people on different types of insurance in each state over the years and for the United States population as a whole. With the population being measured by the data being the same, we would be able to analyze our research questions effectively. The types of insurance fell in the following categories: Employer, Non-Group, Medicaid, Medicare, Military, and Uninsured. This dataset was also very complete meaning that when joining there wouldn’t need to be a lot of data cleaning. Another significant reason for why we chose this dataset was because it made data merging very easy. This dataset had a years column and states column which are also present in the first dataset we chose. Both datasets also provided data over a decade or more meaning we could research trends in the data to find more in depth and concrete answers to our research questions. The data is collected by the Kaiser Family Foundation(KFF) which is a source for health policy research, polling, and news. The data is based on the 2008-2022 American Community Survey and excluded the 1-year estimates for 2020 due to significant disruptions to the data collection because of the coronavirus pandemic. It is also a public dataset on the organization’s website and is free to use. 
+
+The final datasets that we used in our analysis are a combination of the two datasets with key variables being derived from the information in the datasets we selected. The main dataset that is derived from joining the two that we found contains data of total deaths from all 10 causes, deaths in total, deaths per 100,000 relative to population size, region of the United States a state is in, and a breakdown of different insurance coverage percentages by population from 2008-2017 for all 50 states and the United States as a whole. It was joined based on years and states that both datasets had in common. Each row in the dataset represents the number of deaths and insurance coverage distribution percentages for a specific cause of death in a specific year for a state or US as a whole between 2008-2017. In total, there are 5720 observations with no missing data. The following clarifies the meaning and derivation of variables that were used in our analysis from the main joined dataset:
+	
+- Year - provided by dataset, year the data is from
+- Cause Name - provided by dataset, specific cause of death
+- State - provided by dataset, state the data represents
+- Deaths - provided by dataset, total number of deaths for a state or the United States as a whole
+- Age-adjusted Death Rate - provided by dataset, number of deaths per 100,000 relative to state or country population
+- Employer - provided by dataset, percentage of population on employer provided insurance
+- Non-Group - provided by dataset, percentage of population on individually bought/not employer provided insurance
+- Medicaid - provided by dataset, percentage of population on government assisted insurance (low income)
+- Medicare - provided by dataset, percentage of population on federal health insurance program (elderly and disabled)
+- Military - provided by dataset, percentage of population on military insurance
+- Uninsured - provided by dataset, percentage of population with no insurance
+- Region - derived using state name which was passed into a function that returned region based on the state name and mutated the joined datasets, region of the United States a state is in (for United States, it is just US)
+- Low_income_insurance - derived using sum of Medicaid and Uninsured percentages in each observation and mutated the joined dataset, percentage of population classified as having low income
+
+The second dataset that was used in our analysis was a summarization data frame consisting of variables inherited or derived from the datasets we had selected and aggregations of data points. It consists of yearly data from 2008-2017 of regional average deaths per 100,000 for all causes of death and average uninsured percentage. Each row in the data frame describes the average deaths per 100,000 and average uninsured percentage of a given region in a given year. In total there are 60 rows and there were no missing data points. The new variables that were calculated for this data frame include avg_age_adjusted_death_rate and avg_uninsured_rate. Average_age_adjusted_death_rate was derived by filtering the joined data for deaths classified as “all causes” first then grouping by year and region and finally finding the mean of “Age-adjusted Death Rate”, ignoring null values. Average_uninsured_rate underwent the same filtering and grouping except it used the mean of “Uninsured”, ignoring null values. The following clarifies the meaning and derivation of variables that were used in our analysis from the summarization dataset:
+
+- Year - provided by joined dataset, year data is associated with
+- Region - calculated earlier and inherited from joined dataset, region of the United States a state is associated with
+- Avg_age_adjusted_death_rate - derived from joined dataset using procedure described above, average number of deaths per 100,000 for a given region for all causes of death
+- Avg_uninsured_rate - derived from joined dataset using procedure described above, average percentage of individuals in a given region who are uninsured
+
+### Methods
+When doing initial data processing to get our final data frames that we would be working with, we used the state variable from the first dataset and the medicaid and uninsured variables from the second dataset to get new variables that would contribute to our research. The variables we used that were already in the datasets include year, cause name, and age-adjusted death rate from the first dataset and employer, medicaid, medicare, and uninsured from the second dataset. We joined the datasets with an inner join based on year and state so all the observations had entries in both tables. The following lists the reasons for why we chose state, medicaid, and uninsured variables and the methodologies we used to derive new variables in our final dataset:
+
+- State - We used state to derive the variable region because it would allow generalization of our research questions so we could answer them in a broader scope. It also allowed us to be able to identify trends in data based on a categorical variable which fit with our research questions that were focused on the US and parts of the US. Another consideration we made was to ensure readability of our visualizations and if we were to plot data for all 50 states, it would be difficult to see trends. However, by generalizing for regions, we are unable to perform a state level analysis for trends. The state variable was processed by passing it into a function that returned the region to a new variable in our data frame based on the state name.
+- Medicaid/Uninsured - We used the sum of the medicaid and uninsured variables to calculate the percentage of the population we classified as low income because we wanted to explore relationships between income and deaths. Then we mutated the main data frame to have this new calculated variable.
+
+The following lists why we chose year, cause name, and age-adjusted death rate from the first dataset and employer, medicaid, medicare, and uninsured from the second dataset:
+
+- Year - Year would allow us to identify trends over a period of 10 years to analyze correlations between different variables.
+- Cause Name - We chose specific causes to identify trends in a specific cause of death.
+- Age-Adjusted Death Rate - We chose this variable instead of death count because when doing our visualizations we wanted to make sure our data wasn’t skewed by the number of states in a region or the population of larger states as more people result in higher death totals. 
+- Employer - We wanted to explore relationships between employer insurance percentage and accidental deaths in our research. 
+- Medicaid - We wanted to explore the relationship between low income and deaths for related diseases that could be medically treated/prevented like heart disease, diabetes, and stroke.
+- Medicare - We wanted to explore the relationship between coverage for the elderly/immunocompromised and deaths caused by influenza/pneumonia as this category is more susceptible. 
+- Uninsured - We wanted to explore the relationship between low income and deaths for related diseases that could be medically treated/prevented like heart disease, diabetes, and stroke.
+
+For our summarized data frame, we focused on aggregating data used in showing the relationship between average percentage of low income/uninsured and average deaths from all causes per 100,000 as that was one of our research questions. The reason we wanted all causes was because we wanted to see if there was an overall relationship rather than a relationship with a specific cause. We could have done it by cause too to make our analysis more detailed. Since we wanted average deaths for all causes we filtered the joined data frame for only those entries first. Then we grouped by year and region (region was added in the joined data frame) as we wanted yearly death averages from each region. Finally we got means for age-adjusted death rate and uninsured variables to make the data point more representative of all states in a region. 
+
+For question 1, the visualization we chose was a scatter plot of aggregated data points by region from 2008-2017 where the x axis was the average uninsured percentage in a region and the y axis was the average number of deaths per 100,000 from all 10 causes. We also have a line showing the trend of data points to make the relationship more obvious between the two variables and found that a non straight line accomplished this better. We sampled all data from the furthest range possible from the datasets we selected because it would make any trends clearer. We processed the data by taking the summarized data frame above and plotting average insurance rates on the x and average deaths on the y using points then adding the trend line. Another visualization we had tried was using different point shapes by year but we found it to be difficult to read and the trend was difficult to see. 
+
+For question 2 part 1, the visualizations we chose were dot plots by region where x is year and y is average low income/non insured percent. The size of the points scale with the average deaths in a region during a year and color is based on region to make yearly relationships and regional trends obvious. The data frame used was the main joined data frame and we filtered for heart disease and diabetes since we wanted preventable/treatable conditions. We also grouped our data by region and year and got the mean death rates and insurance percentages to be representative of a region. For question 2 part 2, we went with the same visualization type except we got the average percentages for a specific insurance type since we were trying to identify if some insurance types were more effective at preventing deaths from certain conditions. 
+
+For question 3, we went with dot plots connected by lines where x is year and y is average deaths per 100,000. Regions had different colors and the lines connecting the points made the trends for each region clearer. To create visualizations for each condition, we filtered the joined table for a cause then grouped by year and region since we wanted points to represent yearly data by region. Finally we averaged regional deaths per 100,000 for the y axis values to represent a region. This enabled us to see how regions performed healthwise relative to other regions over the years, identify the healthiest/unhealthiest regions, and see relationships between different conditions that have been proven to be medically related.
+
+### Results/Visualizations
+#### Question 1 Visualizations
+```{r}
+library(readr)
+library(ggplot2)
+library(dplyr)
+causesOfDeath <- read_delim("data/NCHS_-_Leading_Causes_of_Death__United_States.csv")
+insuranceCoverage <- read_delim("data/StateInsuarancePercentage.csv")
+df <- inner_join(causesOfDeath, insuranceCoverage, by = c("Year", "State"))
+
+get_region <- function(state) {
+  NE <- c('Maine', 'Massachusetts', 'Rhode Island', 'Connecticut', 'New Hampshire', 'Vermont', 'New York', 'Pennsylvania', 'New Jersey', 'Delaware', 'Maryland')
+  SE <- c('West Virginia', 'Virginia', 'Kentucky', 'Tennessee', 'North Carolina', 'South Carolina', 'Georgia', 'Alabama', 'Mississippi', 'Arkansas', 'Louisiana', 'Florida')
+  MW <- c('Ohio', 'Indiana', 'Michigan', 'Illinois', 'Missouri', 'Wisconsin', 'Minnesota', 'Iowa', 'Kansas', 'Nebraska', 'South Dakota', 'North Dakota')
+  SW <- c('Texas', 'Oklahoma', 'New Mexico', 'Arizona')
+  W <- c('Colorado', 'Wyoming', 'Montana', 'Idaho', 'Washington', 'Oregon', 'Utah', 'Nevada', 'California', 'Alaska', 'Hawaii')
+  DOC <- c('District of Columbia')
+  
+  if (state %in% NE) {
+    return('Northeast')
+  }
+  else if (state %in% SE) {
+    return('Southeast')
+  }
+  else if (state %in% MW) {
+    return('Midwest')
+  }
+  else if (state %in% SW) {
+    return('Southwest')
+  }
+  else if (state %in% W) {
+    return('West')
+  }
+  else {
+    return('US')
+  }
+}
+
+deaths_vs_insurance <- df %>%
+  mutate(Region = sapply(State, get_region)) %>% 
+  filter(State != "District of Columbia")
+
+deaths_vs_insurance <- deaths_vs_insurance %>% 
+  mutate(low_income_insurance = Uninsured + Medicaid)
+
+uninsured_deaths <- deaths_vs_insurance %>% 
+  filter(`Cause Name` == "All causes") %>% 
+  group_by(Year, Region)  %>% 
+  summarize(avg_age_adjusted_death_rate = mean(`Age-adjusted Death Rate`, na.rm = TRUE),
+            avg_uninsured_rate = mean(Uninsured, na.rm = TRUE))
+
+uninsured_deaths %>% 
+  ggplot(aes(x = avg_uninsured_rate, y = avg_age_adjusted_death_rate, color = factor(Region))) +
+  geom_point() +
+  geom_smooth(method = "loess", span = 0.4, color = "red") +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(title = "Average Age-adjusted Death Rate vs Average Uninsured Percentage (2008-2017)",
+       x = "Average Uninsured Percentage",
+       y = "Average Age-adjusted Death Rate per 100,000") 
+```
+
+#### Question 2 Visualizations
+#### Part 1
+```{r}
+deaths_vs_insurance %>% 
+  filter(`Cause Name` == "Heart disease") %>% 
+  group_by(Year, Region) %>% 
+  mutate(avg_death = mean(`Age-adjusted Death Rate`)) %>% 
+  mutate(avg_low_income_insuarance = mean(low_income_insurance)) %>% 
+  ggplot(aes(Year, avg_low_income_insuarance, size = avg_death, color = Region)) +
+  geom_point() +
+  labs(x = "Year", y = "Average Low Income/Non Insured Percent", title = "Deaths/100,000 based on low income/non insured percent (Heart Disease)") +
+  scale_size_binned(breaks = seq(160, 220, by = 10))
+
+deaths_vs_insurance %>% 
+  filter(`Cause Name` == "Diabetes") %>% 
+  group_by(Year, Region) %>% 
+  mutate(avg_death = mean(`Age-adjusted Death Rate`)) %>% 
+  mutate(avg_low_income_insuarance = mean(low_income_insurance)) %>% 
+  ggplot(aes(Year, avg_low_income_insuarance, size = avg_death, color = Region)) +
+  geom_point() + 
+  labs(x = "Year", y = "Average Low Income/Non Insured Percent", title = "Deaths/100,000 based on low income/non insured percent (Diabetes)") +
+  scale_size_binned()
+```
+
+#### Part 2
+```{r}
+deaths_vs_insurance %>% 
+  filter(`Cause Name` == "Unintentional injuries") %>% 
+  group_by(Year, Region) %>% 
+  mutate(avg_death = mean(`Age-adjusted Death Rate`)) %>% 
+  mutate(avg_employer_insuarance = mean(Employer)) %>% 
+  ggplot(aes(Year, avg_employer_insuarance, size = avg_death, color = Region)) +
+  geom_point() + 
+  labs(x = "Year", y = "Average Employer Insured Percent", title = "Deaths/100,000 based on employer insured percent (Accidents)") +
+  scale_size_binned(breaks = seq(30, 50, by = 3))
+
+deaths_vs_insurance %>% 
+  filter(`Cause Name` == "Influenza and pneumonia") %>% 
+  group_by(Year, Region) %>% 
+  mutate(avg_death = mean(`Age-adjusted Death Rate`)) %>% 
+  mutate(avg_medicare_insuarance = mean(Medicare)) %>% 
+  ggplot(aes(Year, avg_medicare_insuarance, size = avg_death, color = Region)) +
+  geom_point() + 
+  labs(x = "Year", y = "Average Medicare Insured Percent", title = "Deaths/100,000 based on Medicare insured percent (influenza/pneumonia)") +
+  scale_size_binned()
+```
+
+#### Question 3
+```{r}
+causes_vs_insurance <- df %>%
+ mutate(Region = sapply(State, get_region)) %>% 
+ filter(State != "District of Columbia")
+
+causes_vs_insurance <- causes_vs_insurance %>% 
+ mutate(low_income_insurance = Uninsured + Medicaid)
+
+causes_vs_insurance <- causes_vs_insurance %>% 
+ mutate(cause_type = case_when(
+ `Cause Name` %in% c("Cancer", "Cirrhosis", "Stroke", "Diabetes") ~ "Selected Causes",
+ TRUE ~ "Other Causes"
+ ))
+
+avg_death_rates <- causes_vs_insurance %>% 
+  group_by(Year, Region, cause_type) %>% 
+  mutate(avg_age_adjusted_death_rate = mean(`Age-adjusted Death Rate`, na.rm = TRUE), avg_uninsured_rate = mean(Uninsured, na.rm = TRUE))
+
+ggplot(avg_death_rates, aes(x = Year, y = avg_age_adjusted_death_rate, group = Region, color = Region)) +
+ geom_line() +
+ facet_wrap(~cause_type, ncol = 1) +
+ labs(title = "Region-wise trends due to different causes of death",
+       x = "Year",
+       y = "Age-adjusted Death Rate per 100,000") 
+
+deaths_vs_insurance %>% 
+  filter(`Cause Name` == "Heart disease") %>% 
+  group_by(Year, Region) %>% 
+  summarize(avg_deaths = mean(`Age-adjusted Death Rate`)) %>% 
+  ggplot(aes(Year, avg_deaths, color = factor(Region))) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Year", y = "Average Deaths per 100,000", title = "Average Deaths per 100,000 (Heart Disease) by Region vs Year")
+
+deaths_vs_insurance %>% 
+  filter(`Cause Name` == "Stroke") %>% 
+  group_by(Year, Region) %>% 
+  summarize(avg_deaths = mean(`Age-adjusted Death Rate`)) %>% 
+  ggplot(aes(Year, avg_deaths, color = factor(Region))) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Year", y = "Average Deaths per 100,000", title = "Average Deaths per 100,000 (Stroke) by Region vs Year")
+
+deaths_vs_insurance %>% 
+  filter(`Cause Name` == "Cancer") %>% 
+  group_by(Year, Region) %>% 
+  summarize(avg_deaths = mean(`Age-adjusted Death Rate`)) %>% 
+  ggplot(aes(Year, avg_deaths, color = factor(Region))) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Year", y = "Average Deaths per 100,000", title = "Average Deaths per 100,000 (Cancer) by Region vs Year")
+```
+
+### Discussion of Findings
+#### Question 1 Findings
+The visualization shows that higher average uninsured percentages generally result in higher average deaths per 100,000 from all causes. This means that affordable health care plays a crucial part in preventing deaths from common illnesses like influenza to serious ones like cancer. With higher percentages of uninsured people, less are able to have regular health checkups or afford expensive treatments that are covered by insurance plans resulting in higher death rates. In the visualization, it can be seen that the trend line has a positive slope. The northeast generally had 5-10% uninsured and 700-750 deaths per 100,000 but the southeast had 10-15% uninsured and 850-900 deaths per 100,000. While this is the most extreme case, the southwest had 17.5-22.5% uninsured and 775-825 deaths per 100,000. With the southeast already being the unhealthiest region in general, having higher uninsured rates exponentially increased the average deaths. Regions like the southeast that are more moderate saw a steady increase in deaths for higher uninsured percentages. Exactly how impactful the uninsured percentage is on deaths needs to be further analyzed by doing state level analysis over a period of a couple decades. There needs to also be research into how the number of healthcare visits impacts an individual's health and their chances of developing different illnesses to further support this claim. 
+
+#### Question 2 Findings
+#### Part 1
+Deaths/100,000 based on low income/non insured percent (Heart Disease):
+
+We can see that higher average percentages of individuals who fall in the Medicaid and Uninsured category generally leads to higher rates of death for heart disease. This means that those who are low income are more likely to develop heart disease conditions leading to death. The aforementioned relationship can be seen when comparing the sizes of the points for every x value (year) since the size of a point scales with the average number of deaths per 100,000 in a given region. Looking at all the regions it is clear that for almost every year from 2008-2017, the point gets bigger for regions higher on the y axis with higher average percentages of individuals who use Medicaid or are uninsured except the west which looks to be more healthy compared to other regions. It is most obvious when comparing the west to the southeast. The west generally has 5-10% lower low income insurance percent and its points look to be all less than 160 deaths per 100,000. However, the southeast has points that look to all be greater than 190 deaths per 100,000. One of the reasons is that these individuals are unable to afford regular doctor checkups or expensive treatments. Possible other explanations for this may be that those who are uninsured or on assisted insurance plans can’t afford healthy food, gym memberships, or healthy living environments making them more prone to developing heart disease. There would need to be further analysis to make these claims.
+
+Deaths/100,000 based on low income/non insured percent (Diabetes):
+
+We can see once again that higher percentages of assisted insurance and uninsured result in higher death rates except this visualization is for diabetes. The most obvious indication of this relationship would be comparing the northeast and west with the southeast and southwest. All points corresponding to the west and northeast are generally 5-15% less than the southeast and southwest and almost all the points for the southeast and southwest regions are 24 deaths or greater while the west and northeast points are less than 20 deaths per 100,000. This trend could be connected with what was found from the heart disease analysis above as those with diabetes are twice as likely to develop heart disease and diabetes is most commonly caused by obesity and lack of exercise which can be attributed to not being able to have regular doctor checkups or access to healthy food, gym memberships, and healthy living conditions. The latter factors like mentioned before need to be analyzed further. 
+
+#### Part 2
+Deaths/100,000 based on employer insured percent (Accidents):
+
+We chose to analyze employer insured percent versus deaths caused by accidents/unintentional injury since for the working population, most accidents occur on the job or are covered by employer insurance. From the data we can see that higher percentages of employer provided insurance coverage generally lead to lower deaths on average per 100,000. This trend is most clear for the northeast, midwest, and general US data. For the northeast, the average employer provided insurance percent decreased over 10% from 2008-2017 and average deaths increased by over 10. For the midwest, insurance decreased by 8% and deaths increased by over 5. For the US, insurance percent decreased by 10% and deaths increased by 10. This shows that those with employer provided insurance have greater access to healthcare to treat accidents.
+
+Deaths/100,000 based on Medicare insured percent (influenza/pneumonia):
+
+We chose to analyze Medicare insured percent versus deaths caused by influenza/pneumonia because the elderly and immunocompromised are susceptible to influenza/pneumonia and Medicare provides insurance coverage for the elderly/disabled. In general, higher percentages of Medicare coverage resulted in deaths from influenza/pneumonia decreasing or staying the same. This is clear in the southwest, northeast, and US data. The southwest had a 2.5% increase in Medicare coverage and over a 5 death decrease, the northeast had a 3% increase and 3 death decrease, and the US had a 2.5% increase and 5 death decrease from 2008-2017. This means that Medicare provided the elderly with the opportunity to seek treatment for influenza/pneumonia which led to less deaths. There would need to be further analysis to verify that the increase in Medicare percentage wasn’t a direct result of an increase in the elderly/immunocompromised population. 
+
+
+#### Question 3 Findings
+Overall plot:
+
+This R plot represents the age-adjusted death rate per 100,000 people across various regions in the United States. The data has been normalized by age, allowing for a fair comparison of mortality rates across different age groups.
+
+The x-axis represents the year 2015, which means the data plotted is specific to that year. The y-axis represents the age-adjusted death rate per 100,000 people, with a higher number indicating a higher death rate. The plot is color-coded based on the region of the United States, with each region represented by a unique color.
+
+Upon observing the plot, it can be inferred that the death rate across different regions varies. For example, the death rate in the Northeast region is higher than that in the Midwest region, while the death rate in the Southeast region is significantly lower than that in the Midwest region.
+
+The regions can also be observed to exhibit some degree of variation within themselves, indicating that mortality rates can differ even within a given region based on factors such as lifestyle, access to healthcare, and other socioeconomic factors.
+
+The presence of two trend lines on the plot suggests that the age-adjusted death rate has shown an increase over the years for other causes and for selected causes (Heart Disease, Stroke, Cancer).
+
+It is important to note that while this plot provides valuable insights into regional trends in mortality rates, it does not offer a comprehensive explanation for these trends. Thus, further investigation into the specific causes of death and other relevant factors can be seen in the following plots to determine the underlying drivers of these patterns.
+
+
+Deaths/100,000 per Region vs Year (Heart Disease):
+
+The southeast region of the US is the clear leader in the number of deaths per 100,000 by about 25 deaths. The western region of the US leads in lowest number of deaths per 100,000 by about 20 deaths. This tells us that people who live in the southeast region of the US are more unhealthy relative to other parts of the US and therefore more prone to heart disease. However, people living in the western region of the US are the least likely to develop heart disease meaning that they may be more likely to have healthier lifestyles. This could be caused by factors such as diet, exercise, smoking habits/smoke exposure, etc. but we would need to do analysis on data sets regarding those factors to make a solid claim. The other regions of the US including the midwest, northwest, and southwest are in the middle with not a lot of deviation. Between 2008 and 2017, the general trend for all regions and the United States as a whole is that the population has been getting healthier, with a downwards trend in the number of deaths per 100,000 caused by heart disease. All regions had a decrease between 10-30 deaths per 100,000 throughout this time period. It can also be observed that while the southeast region had the highest deaths per 100,000 in 2008, it also had the greatest decrease in average number of deaths by almost 30 deaths per 100,000. However, even with such a significant improvement, it still leads by about 15 deaths per 100,000. The northeast region is close behind with the most improvement for regions that started in the middle with a decrease of about 25 deaths per 100,000. This makes the region close to the west in becoming the leader in lowest deaths caused by heart disease with only a 10 death gap. All other regions showed moderate improvement while the United States as a whole had about a 25 death decrease from 2008-2017. This means over the course of a decade individuals in all regions had a significant decrease in their chances of developing heart disease. 
+
+Deaths/100,000 per Region vs Year (Stroke):
+
+The southeast region of the United States is once again the clear leader in average number of deaths per 100,000 for strokes. It leads by about 7 deaths which further supports the fact that it is one of the unhealthiest regions due to possible factors like diet, exercise, climate, etc. The region with the lowest deaths is the northeast by about 5 deaths instead of the west. All other regions are tightly grouped in the middle, similar to how the data for heart disease was distributed. This data shows that there may be some correlation between heart disease and stroke which is expected as those with heart disease are more susceptible to strokes. We can also see that in 2015, all regions had a slight increase in average deaths caused by strokes and this pattern happened in the heart disease visualization. Overall, all regions have made significant improvements in decreasing the number of deaths caused by stroke between 2008-2017, just like the data from heart disease. While the southeast was once again the unhealthiest, it also showed the most improvement again, but still leads by a significant margin. Over the last decade, the chances of having a stroke have decreased like heart disease but the exact cause could be the result of health education, diet, medical advancements, etc. and would require further analysis to determine.
+
+Deaths/100,000 per Region vs Year (Cancer):
+
+The southeast region leads in deaths again, with the highest by about 15 deaths for cancer related deaths. We can see that the west once again has the lowest number of deaths by about 10 making it one of the healthiest regions of the United States. All three visualizations have concluded that those who live in the southeast are significantly more likely to develop heart disease, strokes, or cancer. Possible reasons for why the data looks the way it does and why different regions consistently fall in the same rankings relative to each other can be drawn from the relationship between heart disease, stroke, and cancer. Prolonged conditions like hypertension often lead to heart disease and strokes. It also puts people at higher risks for certain types of cancer like prostate cancer in men and breast cancer in women. To solidify this claim we would need additional data specific to each condition to make claims on causation. It can also be seen that all regions have had improvements between 2008-2017 with the southeast having the greatest improvement. This could be due to more awareness of healthy eating and exercise, medical advancement, etc. but there would need to be more analysis to pinpoint the greatest contributing factors.
+
+### Summary 
+The three questions we wanted to answer in our research was how uninsured percentages impacted overall deaths, how low income insurance or no insurance affected death rates in treatable/preventable diseases, and healthiest and unhealthiest regions in the United States in terms of certain medically linked conditions. Our first two questions were focused on health care accessibility and how effective widespread health care is at preventing deaths in general and for specific diseases that have early symptoms. We also looked into links between certain types of health insurance and causes of death. The third question was more generalized for the United States and determining the health of regions relative to each other. In our analysis we found that accessible health insurance plays a significant role in preventing deaths in general. For the most extreme cases, a 5% increase in uninsured resulted in over 150 more deaths per 100,000 on average. Thus, it follows that regular health checkups that are covered by insurance leads to early detection of conditions and treatment plans that are paid for by an individual’s insurance which can be expensive. The second question expanded on the first by looking at how those on government assisted insurance plans or are uninsured (classified as low income) are affected by conditions that are medically linked and traditionally treatable with early detection and consistent treatment plans. We found that for heart disease and diabetes (both of which are linked to obesity), regions with higher percentages of low income individuals saw higher rates of death. Not only can this observation be a result of lack of health checkups, but also from inaccessibility to healthy foods and exercise facilities. Generally, 5-10% lower Medicaid and uninsured percentages led to 30-50 and 4-5 less deaths per 100,000 for heart disease and diabetes respectively when comparing the healthiest to unhealthiest regions. We also found that higher rates of employer provided insurance resulted in less accidental deaths as unintentional injuries often occur in the workplace or are covered by employer insurances. In the most extreme case, a 4% drop in employer insurance caused almost a 15 death increase. Aside from employer insurance we analyzed the relationship between Medicare percentages and influenza/pneumonia deaths as the elderly/immunocompromised are more susceptible and Medicare covers those types of people. It was concluded that Medicare does help decrease deaths from influenza/pneumonia with a 2.5% increase generally leading to 4 less deaths per 100,000 on average. Finally, we analyzed deaths in medically linked diseases by region to determine the healthiest and unhealthiest region. In general, the west was the healthiest and the southeast was the unhealthiest. Over the years from 2008-2017, deaths for heart disease, stroke, and cancer have all been decreasing with the southeast showing the most improvement as it started out leading in deaths. We also concluded from the data, that the conditions are indeed related as spikes in deaths for a disease were reflected in the other visualizations for different diseases. For example, in 2015, almost all regions saw an increase in heart disease and stroke deaths. Overall, those living in the west are least likely to develop health conditions while those in the southeast are more likely and we believe this is caused by diet differences and the south tend to consume more fried foods. This claim would need to be investigated further to be concrete.
+

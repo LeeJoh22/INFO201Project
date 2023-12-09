@@ -87,31 +87,6 @@ uninsured_deaths %>%
 ```
 
 ### Question 2
-```{r}
-causes_vs_insurance <- df %>%
- mutate(Region = sapply(State, get_region)) %>% 
- filter(State != "District of Columbia")
-
-causes_vs_insurance <- causes_vs_insurance %>% 
- mutate(low_income_insurance = Uninsured + Medicaid)
-
-causes_vs_insurance <- causes_vs_insurance %>% 
- mutate(cause_type = case_when(
- `Cause Name` %in% c("Cancer", "Cirrhosis", "Stroke", "Diabetes") ~ "Selected Causes",
- TRUE ~ "Other Causes"
- ))
-
-avg_death_rates <- causes_vs_insurance %>% 
-  group_by(Year, Region, cause_type) %>% 
-  mutate(avg_age_adjusted_death_rate = mean(`Age-adjusted Death Rate`, na.rm = TRUE), avg_uninsured_rate = mean(Uninsured, na.rm = TRUE))
-
-ggplot(avg_death_rates, aes(x = Year, y = avg_age_adjusted_death_rate, group = Region, color = Region)) +
- geom_line() +
- facet_wrap(~cause_type, ncol = 1) +
- labs(title = "Region-wise trends due to different causes of death",
-       x = "Year",
-       y = "Age-adjusted Death Rate per 100,000") 
-```
 
 ## Part 1
 ```{r}
@@ -162,6 +137,32 @@ deaths_vs_insurance %>%
 ```
 
 ### Question 3
+```{r}
+causes_vs_insurance <- df %>%
+ mutate(Region = sapply(State, get_region)) %>% 
+ filter(State != "District of Columbia")
+
+causes_vs_insurance <- causes_vs_insurance %>% 
+ mutate(low_income_insurance = Uninsured + Medicaid)
+
+causes_vs_insurance <- causes_vs_insurance %>% 
+ mutate(cause_type = case_when(
+ `Cause Name` %in% c("Cancer", "Cirrhosis", "Stroke", "Diabetes") ~ "Selected Causes",
+ TRUE ~ "Other Causes"
+ ))
+
+avg_death_rates <- causes_vs_insurance %>% 
+  group_by(Year, Region, cause_type) %>% 
+  mutate(avg_age_adjusted_death_rate = mean(`Age-adjusted Death Rate`, na.rm = TRUE), avg_uninsured_rate = mean(Uninsured, na.rm = TRUE))
+
+ggplot(avg_death_rates, aes(x = Year, y = avg_age_adjusted_death_rate, group = Region, color = Region)) +
+ geom_line() +
+ facet_wrap(~cause_type, ncol = 1) +
+ labs(title = "Region-wise trends due to different causes of death",
+       x = "Year",
+       y = "Age-adjusted Death Rate per 100,000") 
+```
+
 ```{r}
 deaths_vs_insurance %>% 
   filter(`Cause Name` == "Heart disease") %>% 
